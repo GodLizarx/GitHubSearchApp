@@ -7,6 +7,7 @@
 
 import Foundation
 
+
 protocol NetworkManager {
     func request<T: Decodable>(_ model: API) async throws -> T
 }
@@ -18,18 +19,23 @@ final class NetworkService {
 
 extension NetworkService: NetworkManager {
     func request<T: Decodable>(_ model: API) async throws -> T {
-        if Task.isCancelled { throw NetworkError.cancelled }
-        let urlRequest = try model.asURLRequest()
-        do {
-            let data = try await URLSession.shared.data(for: urlRequest)
-            responseHandler.log(
-                response: data.1 as? HTTPURLResponse,
-                responseData: data.0
-            )
-            return try responseHandler.parse(from: data.0)
-        } catch let error {
-            responseHandler.log(error: error)
-            throw error
-        }
+        return try await withTaskCancellationHandler(
+            operation: {
+                // try await Task.sleep(nanoseconds: 3000000000)
+                let urlRequest = try model.asURLRequest()
+                do {
+                    let data = try await URLSession.shared.data(for: urlRequest)
+                    responseHandler.log(
+                        response: data.1 as? HTTPURLResponse,
+                        responseData: data.0
+                    )
+                    return try responseHandler.parse(from: data.0)
+                } catch let error {
+                    responseHandler.log(error: error)
+                    throw error
+                }
+            }, 
+            onCancel: {}
+        )
     }
 }

@@ -18,7 +18,7 @@ open class BaseViewModel<State: ViewModelState>: ObservableObject {
        fatalError("method 'start' should be overrided")
     }
     
-    private func updateState(newValue: State) {
+    internal func updateState(newValue: State) {
         state = newValue
     }
     

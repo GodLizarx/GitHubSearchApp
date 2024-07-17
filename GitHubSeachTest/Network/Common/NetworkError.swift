@@ -7,6 +7,16 @@
 
 import Foundation
 
+public struct ErrorResponse: Decodable {
+    let message: String
+    let documentationUrl: String
+    
+    enum CodingKeys: String, CodingKey {
+        case message
+        case documentationUrl = "documentation_url"
+    }
+}
+
 public indirect enum NetworkError: LocalizedError {
     case noData
     case anotherError(String, Error)
@@ -14,6 +24,7 @@ public indirect enum NetworkError: LocalizedError {
     case processableError(Error)
     case invalidResponse
     case wrongStatusCode(_ statusCode: Int)
+    case requestLimitExceeded(response: ErrorResponse)
     case noInternet
     case cancelled
 }

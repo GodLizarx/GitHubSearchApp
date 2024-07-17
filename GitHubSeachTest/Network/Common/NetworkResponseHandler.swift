@@ -12,7 +12,17 @@ public class NetworkResponseHandler {
     private let decoder = JSONDecoder()
     
     func parse<T: Decodable>(from jsonObject: Data) throws -> T {
-        return try decoder.decode(T.self, from: jsonObject)
+        do {
+            let decodedData = try JSONDecoder().decode(T.self, from: jsonObject)
+            return decodedData
+        } catch {
+            do {
+                let errorResponse = try JSONDecoder().decode(ErrorResponse.self, from: jsonObject)
+                throw NetworkError.requestLimitExceeded(response: errorResponse)
+            } catch {
+                throw error
+            }
+        }
     }
     
     func log( error: Error?) {

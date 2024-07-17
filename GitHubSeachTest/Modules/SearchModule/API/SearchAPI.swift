@@ -8,7 +8,7 @@
 import Foundation
 
 enum SearchAPI {
-    case search(query: String)
+    case search(_ query: String, _ page: Int)
 }
 
 extension SearchAPI: API {
@@ -22,8 +22,11 @@ extension SearchAPI: API {
     
     var parameters: [String : Any]? {
         switch self {
-        case .search(let query):
-            return ["q": query]
+        case .search(let query, let page):
+            return [
+                "q": query,
+                "page": page
+            ]
         }
     }
     
