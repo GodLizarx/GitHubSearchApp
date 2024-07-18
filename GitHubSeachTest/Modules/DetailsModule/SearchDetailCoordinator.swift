@@ -9,7 +9,7 @@ import UIKit
 import SwiftUI
 
 class SearchDetailCoordinator: Coordinator {
-    var navigationController: UINavigationController
+    unowned var navigationController: UINavigationController
     var parentCoordinator: Coordinator
     var childCoordinators: [Coordinator] = []
     private let model: SearchItemResponse
@@ -32,8 +32,8 @@ class SearchDetailCoordinator: Coordinator {
     }
     
     func back() {
-        navigationController.popViewController(animated: true)
         parentCoordinator.childDidFinish(self)
+        navigationController.popViewController(animated: true)
     }
     
     func childDidFinish(_ child: Coordinator?) {

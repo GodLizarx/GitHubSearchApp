@@ -9,7 +9,7 @@ import SwiftUI
 
 class AppCoordinator: Coordinator {
     var navigationController: UINavigationController
-    internal var childCoordinators: [Coordinator] = []
+    var childCoordinators: [Coordinator] = []
     
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController

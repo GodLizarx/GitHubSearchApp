@@ -9,7 +9,7 @@ import Foundation
 import SwiftUI
 
 class SearchCoordinator: Coordinator {
-    var navigationController: UINavigationController
+    unowned var navigationController: UINavigationController
     var parentCoordinator: Coordinator
     var childCoordinators: [Coordinator] = []
     
@@ -35,7 +35,7 @@ class SearchCoordinator: Coordinator {
             parentCoordinator: self,
             model: model
         )
-        self.parentCoordinator.childCoordinators.append(detailedCoordinator)
+        self.childCoordinators.append(detailedCoordinator)
         detailedCoordinator.start()
     }
     
